@@ -273,26 +273,20 @@ grid on
 
 subplot(3,1,2)
 dD = diff(rspD)/T;
-plot(t(2:length(t)),dD,'LineWidth',lineWidth)
+plot(t(2:length(t)),dD)
 hold on
 dA = diff(rspA)/T;
 dA(1) = dA(2);
-plot(t(2:length(t)),dA,'r--','LineWidth',lineWidth)
+plot(t(2:length(t)),dA,'r')
 ylabel('Velocity (rad/sec)','FontSize', labelSize)
-axis([0 0.3 -50 50 ]);
-grid on
-
-
-
 subplot(3,1,3)
 ddD = diff(dD)/T;
-plot(t(3:length(t)),ddD,'LineWidth',lineWidth)
+plot(t(3:length(t)),ddD)
 hold on
 ddA = diff(dA)/T;
-plot(t(3:length(t)),ddA,'r--','LineWidth',lineWidth)
+plot(t(3:length(t)),ddA,'r')
 ylabel('Acceleration (rad/sec^2)','FontSize', labelSize)
 xlabel('Time (sec)','FontSize', labelSize)
-axis([0 0.3 -5000 5000]);
 
 
 %% for position space
@@ -421,8 +415,7 @@ xDist   = atand(diff(yTraj)/diff(xTraj));
 pause();
 % 
 % %savefig('fig4p8.pdf','pdf')
-%tname = 'throwTrajRSPacc.pdf';
-tname = 'throwTrajRSPplot.pdf';
+tname = 'throwTrajRSPacc.pdf';
 saveas(gca,tname);
 system(['pdfcrop ',tname,' ',tname]);
 

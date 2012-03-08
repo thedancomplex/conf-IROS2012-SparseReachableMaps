@@ -1,42 +1,44 @@
 \subsection{On-Line Trapezoidal Motion Profile}
 
-The robot's starting position $x_0$ is not guaranteed to be the same as the first point in the velocity trajectory $L_d$.  To avoid over large accelerations when giving this step input from $x_0$ to $L_d(0)$ an on-line trapezoidal motion profile (TMP) was used to generate joint space commands with the desired limited angular acceleration and velocity.  The TMP was only active during the setup phase where the robot's end-effector moves from $x_0$ to $L_d(0)$.
+The robot's starting position $x_0$ is not guaranteed to be the same as the
+first point in the velocity trajectory $L_d$.  To avoid over large
+accelerations when giving this step input from $x_0$ to $L_d(0)$ an on-line
+trapezoidal motion profile (TMP) was used to generate joint space commands with
+the desired limited angular acceleration and velocity.  The TMP was only active
+during the setup phase where the robot's end-effector moves from $x_0$ to
+$L_d(0)$.
 
-The TMP was designed to limit the applied angular velocity and acceleration in joint space and to prevent over current/torque which limits the physical system. 
-To prevent damage to the hardware, it was
-necessary to limit the angular velocity and acceleration of each joint. One
-simple approach is to limit output velocity and acceleration via a saturation
-function.  Unfortunately, when this modified velocity profile is integrated to
-produce a position trajectory, the clipping will cause drift from the desired
-goal.
+The TMP was designed to limit the applied angular velocity and acceleration in
+joint space and to prevent over-current/torque. An important advantage over
+simply limiting output velocity and acceleration is that the TMP has little to
+no overshoot. When a clipped and rate-limited velocity profile is integrated,
+the resulting position trajectory may over or undershoot due to this non-linear
+system behavior.  The TMP accounts for the imposed limits inherently, and will
+arrive at a static goal without overshoot.
+%TODO: Several statements in here are a bit conjectural
 
-The solution to the clipping problem is well-known in literature as the
-trapezoidal motion profile \cite{XXX}. It is so named because the velocity
-profile resembles a trapezoid, where the slope of each non-parallel side
-corresponds to the maximum acceleration allowed in the joint. 
-
-For a large displacement goal, the
-joint accelerates at the maxi, the method consists of three major steps:
+There are three major steps from the initial state to a goal position:
 
 \begin{enumerate}
-\item Accelerate at the maximum acceleration in the direction of the goal
+\item Accelerate at maximum acceleration in the direction of the goal
 \item Achieve and hold maximum velocity
-\item Decelerate to zero velocity to stop at the goal position
+\item Decelerate to zero velocity to reach goal
 \end{enumerate}
 
 The area under the velocity trapezoid is the total displacement achieved by the
 profile. By shaping this profile based on initial and goal conditions, any
-goal position can be precisely reached even if velocity clipping occurs. The
+goal position can be precisely reached, even if velocity clipping occurs. The
 shape of the profile can be challenging to identify, however, since it is not
 always a trapezoid. For small displacements and large velocity / acceleration
-limits, the profile will only reach a fraction of maximum velocity. The varying
-shape of the profile means that calculating and storing the entire profile for
-each update could be computationally expensive. 
+limits, the profile will only reach a fraction of maximum velocity, and will be
+triangular. The varying shape of the profile means that calculating and storing
+the entire profile for each update could be computationally expensive. 
 %THis is a weak statement, since I can't back that up.  Really, it's just unncecessary since my way is better.
 
 The area under the trapezoid can be divided into an accelerating
-\eqref{eq:trapslope} and constant velocity portion, where the area is simply a triangle. the time to accelerate is
-solved from the final velocity and the acceleration limit.
+\eqref{eq:trapslope} and constant velocity portion, where the area is simply a
+triangle. the time to accelerate is solved from the final velocity and the
+acceleration limit.
 
 \begin{equation}
 \label{eq:trapslope}
@@ -45,25 +47,54 @@ solved from the final velocity and the acceleration limit.
 
 An important consequence of this calculation is that all trapezoidal profiles
 end by decelerating at the acceleration limit to the goal position. Rewriting
-\eqref{eq:trapslope} slightly, the deceleration distance $x_d$ can be found
+\eqref{eq:trapslope} slightly, the deceleration (stopping) distance $d_s$ can be found
 from the current velocity $v_0$ in \eqref{eq:decdist}. As long as the goal
-distance and deceleration distance are identical, then the controller simply
+distance and deceleration distance are equal, then the controller simply
 needs to decelerate at the maximum rate to come to rest at the goal. At a given
-time step, the controller only needs to drive the joint to the sliding surface defined by \eqref{eq:decsliding}. To be on this surface, the current velocity must equal the critical velocity for a given goal distance, which is found by solving \eqref{eq:decsliding} for critical velocity $v_c$ in \eqref{eq:vcrit}.
+time step, the controller only needs to drive the joint to the sliding surface
+defined by \eqref{eq:decsliding}. To be on this surface, the current velocity
+must equal the critical velocity for the current goal distance.
+
+The critical velocity $v_c$ is defined as such that, if the joint began moving at
+this velocity starting at the following time-step, it could decelerate at
+maximum rate to zero velocity, stopping at the position goal. Since the joint
+will still move during the following time-step, an error distance $x_{err}$ is
+introduced \eqref{eq:xerr}.  Defining $\hat{u}$ as the sign of the distance to
+the goal, $v_c$ is related to $x_g$ and $x_{err}$ quadratically in
+\eqref{eq:vc2}.  Solving for $v_c$ using the quadratic formula produces in
+general complex roots due to the possibility of negative $v_0$ or $x_g$.  In
+]\eqref{eq:vcrit}, $v_0*\hat{u}$ is the velocity wrt the goal direction,
+producing a positive term if the signs of both terms match. This result will
+always produce a real value for all $v_0$ and $x_g$.
+%TODO: Prove this? it should be possible to plot the root as a surface over v_0
+%and x_g
 
 \begin{equation}
 \label{eq:decdist}
-x_d=\frac{v_0^2 sign(v_0)}{2a_{max}}
+d_s=\frac{v_0^2 sign(v_0)}{2 a_{max}}
 \end{equation}
 
 \begin{equation}
-\label{eq:decsliding}
-x_d-x_{goal}=0
+\label{eq:xerr}
+x_{err}=v_0 \tau + \frac{v_c-v_0}{2}\tau
 \end{equation}
-%TODO: Clean up this equation and include the unsolved version, which explains the compensation term for the numerical integration.
+
+\begin{equation}
+\label{eq:uhat}
+\hat{u}=sign(x_g)
+\end{equation}
+
+%\begin{equation}
+%\label{eq:vc1}
+%v_s^2=x_g 2 a_{max}
+%\end{equation}
+
+\begin{equation}
+\label{eq:vc2}
+v_c^2 = 2 a_{max} \left(x_g -x_{err} \right)
+\end{equation}
+
 \begin{equation}
 \label{eq:vcrit}
-v_c=sign(x_{goal}) a_{max} \sqrt{\frac{a_{max} \tau^2-sign(x_{goal}) 4 v_0 \tau+8 \|x_{goal}\|}{4*a_{max}}} - \frac{a_{max} \tau }{2}
+v_c=\hat{u} a_{max} \left(\sqrt{\frac{a_{max} \tau^2 - \hat{u} 4 v_0 \tau+8 |x_g|}{4 a_{max}}} - \frac{ \tau }{2}\right)
 \end{equation}
-
-
