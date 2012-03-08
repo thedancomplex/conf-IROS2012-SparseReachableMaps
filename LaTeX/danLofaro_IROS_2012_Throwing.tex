@@ -1,0 +1,113 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%2345678901234567890123456789012345678901234567890123456789012345678901234567890
+%        1         2         3         4         5         6         7         8
+
+\documentclass[letterpaper, 10 pt, conference]{ieeeconf}  % Comment this line out
+                                                          % if you need a4paper
+%\documentclass[a4paper, 10pt, conference]{ieeeconf}      % Use this line for a4
+                                                          % paper
+
+\IEEEoverridecommandlockouts                              % This command is only
+                                                          % needed if you want to
+                                                          % use the \thanks command
+\overrideIEEEmargins
+% See the \addtolength command later in the file to balance the column lengths
+% on the last page of the document
+
+
+
+% The following packages can be found on http:\\www.ctan.org
+\usepackage{graphics} % for pdf, bitmapped graphics files
+\usepackage{epsfig} % for postscript graphics files
+%\usepackage{mathptmx} % assumes new font selection scheme installed
+%\usepackage{times} % assumes new font selection scheme installed
+\usepackage{amsmath} % assumes amsmath package installed
+%\usepackage{amssymb}  % assumes amsmath package installed
+%\usepackage[style=numeric-comp]{biblatex}
+%\usepackage[numbers,sort&compress]{natbib}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+
+
+\title{\LARGE \bf
+On Throwing with Humanoid Robots
+}
+
+%\author{ \parbox{3 in}{\centering Huibert Kwakernaak*
+%         \thanks{*Use the $\backslash$thanks command to put information here}\\
+%         Faculty of Electrical Engineering, Mathematics and Computer Science\\
+%         University of Twente\\
+%         7500 AE Enschede, The Netherlands\\
+%         {\tt\small h.kwakernaak@autsubmit.com}}
+%         \hspace*{ 0.5 in}
+%         \parbox{3 in}{ \centering Pradeep Misra**
+%         \thanks{**The footnote marks may be inserted manually}\\
+%        Department of Electrical Engineering \\
+%         Wright State University\\
+%         Dayton, OH 45435, USA\\
+%         {\tt\small pmisra@cs.wright.edu}}
+%}
+
+\author{Daniel M. Lofaro$^{1}$, Robert Ellenberg$^{2}$, Jun-Ho Oh$^{3}$, and Paul Oh$^{4}$% <-this % stops a space
+\thanks{*This project was supported by the Drexel Autonomous Systems Lab (DASL) and by a National Science Foundation - Partnerships for International Research and Education grant (\#0730206).}% <-this % stops a space
+\thanks{$^{1}$D. Lofaro is a Ph.D Candidate with the Electrical Engineering Department, Drexel University, Philadelphia PA, USA
+        {\tt\small dan at danlofaro.com}}%
+\thanks{$^{2}$R. Ellenberg is a Ph.D Candidate with the Mechanical Engineering Department, Drexel University, Philadelphia PA, USA
+        {\tt\small rwe24 at drexel.edu}}%
+\thanks{$^{3}$J. Oh is faculity with the Department of Mechanical Engineering, Korean Advanced Institute of Science and Technology, Daejeon, S. Korea
+        {\tt\small jhoh at kaist.ac.kr}}%
+\thanks{$^{4}$P. Oh is faculity with the Department of Mechanical Engineering, Drexel University, Philadelphia PA, USA
+        {\tt\small paul at coe.drexel.edu}}%
+}
+
+
+\begin{document}
+
+
+
+\maketitle
+\thispagestyle{empty}
+\pagestyle{empty}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+	\input{abstract}
+\end{abstract}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{INTRODUCTION}
+	\input{introduction}
+	
+% \section{RELATED WORK}
+%	\input{priorwork}
+	
+	
+% \section{METHODOLOGY}
+	\input{methodology}
+
+%\section{EXPERIMENT}
+	\input{experiment}
+
+%\section{EXPERIMENT \& RESULTS}
+%\section{RESULTS}
+	\input{results}
+
+%\section{CONCLUSION \& FUTURE WORK}
+%\section{CONCLUSION}
+	\input{conclusion}
+	
+%\section{FUTURE WORK}
+%	\input{futurework}
+
+\section{ACKNOWLEDGMENTS}
+	\input{acknowledgments}
+%\cite{tempo}
+\input{references}
+
+
+
+
+\end{document}

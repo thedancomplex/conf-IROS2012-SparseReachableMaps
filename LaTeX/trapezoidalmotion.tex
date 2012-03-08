@@ -1,0 +1,69 @@
+\subsection{On-Line Trapezoidal Motion Profile}
+
+The robot's starting position $x_0$ is not guaranteed to be the same as the first point in the velocity trajectory $L_d$.  To avoid over large accelerations when giving this step input from $x_0$ to $L_d(0)$ an on-line trapezoidal motion profile (TMP) was used to generate joint space commands with the desired limited angular acceleration and velocity.  The TMP was only active during the setup phase where the robot's end-effector moves from $x_0$ to $L_d(0)$.
+
+The TMP was designed to limit the applied angular velocity and acceleration in joint space and to prevent over current/torque which limits the physical system. 
+To prevent damage to the hardware, it was
+necessary to limit the angular velocity and acceleration of each joint. One
+simple approach is to limit output velocity and acceleration via a saturation
+function.  Unfortunately, when this modified velocity profile is integrated to
+produce a position trajectory, the clipping will cause drift from the desired
+goal.
+
+The solution to the clipping problem is well-known in literature as the
+trapezoidal motion profile \cite{XXX}. It is so named because the velocity
+profile resembles a trapezoid, where the slope of each non-parallel side
+corresponds to the maximum acceleration allowed in the joint. 
+
+For a large displacement goal, the
+joint accelerates at the maxi, the method consists of three major steps:
+
+\begin{enumerate}
+\item Accelerate at the maximum acceleration in the direction of the goal
+\item Achieve and hold maximum velocity
+\item Decelerate to zero velocity to stop at the goal position
+\end{enumerate}
+
+The area under the velocity trapezoid is the total displacement achieved by the
+profile. By shaping this profile based on initial and goal conditions, any
+goal position can be precisely reached even if velocity clipping occurs. The
+shape of the profile can be challenging to identify, however, since it is not
+always a trapezoid. For small displacements and large velocity / acceleration
+limits, the profile will only reach a fraction of maximum velocity. The varying
+shape of the profile means that calculating and storing the entire profile for
+each update could be computationally expensive. 
+%THis is a weak statement, since I can't back that up.  Really, it's just unncecessary since my way is better.
+
+The area under the trapezoid can be divided into an accelerating
+\eqref{eq:trapslope} and constant velocity portion, where the area is simply a triangle. the time to accelerate is
+solved from the final velocity and the acceleration limit.
+
+\begin{equation}
+\label{eq:trapslope}
+\Delta x=\frac{v_{max}\tau}{2}=\frac{v_{max}^2 sign(v_{max})}{2a_{max}}
+\end{equation}
+
+An important consequence of this calculation is that all trapezoidal profiles
+end by decelerating at the acceleration limit to the goal position. Rewriting
+\eqref{eq:trapslope} slightly, the deceleration distance $x_d$ can be found
+from the current velocity $v_0$ in \eqref{eq:decdist}. As long as the goal
+distance and deceleration distance are identical, then the controller simply
+needs to decelerate at the maximum rate to come to rest at the goal. At a given
+time step, the controller only needs to drive the joint to the sliding surface defined by \eqref{eq:decsliding}. To be on this surface, the current velocity must equal the critical velocity for a given goal distance, which is found by solving \eqref{eq:decsliding} for critical velocity $v_c$ in \eqref{eq:vcrit}.
+
+\begin{equation}
+\label{eq:decdist}
+x_d=\frac{v_0^2 sign(v_0)}{2a_{max}}
+\end{equation}
+
+\begin{equation}
+\label{eq:decsliding}
+x_d-x_{goal}=0
+\end{equation}
+%TODO: Clean up this equation and include the unsolved version, which explains the compensation term for the numerical integration.
+\begin{equation}
+\label{eq:vcrit}
+v_c=sign(x_{goal}) a_{max} \sqrt{\frac{a_{max} \tau^2-sign(x_{goal}) 4 v_0 \tau+8 \|x_{goal}\|}{4*a_{max}}} - \frac{a_{max} \tau }{2}
+\end{equation}
+
+
