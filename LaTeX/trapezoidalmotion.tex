@@ -51,8 +51,7 @@ end by decelerating at the acceleration limit to the goal position. Rewriting
 from the current velocity $v_0$ in \eqref{eq:decdist}. As long as the goal
 distance and deceleration distance are equal, then the controller simply
 needs to decelerate at the maximum rate to come to rest at the goal. At a given
-time step, the controller only needs to drive the joint to the sliding surface
-defined by \eqref{eq:decsliding}. To be on this surface, the current velocity
+time step, the controller only needs to drive the joint to the sliding surface. To be on this surface, the current velocity
 must equal the critical velocity for the current goal distance.
 
 The critical velocity $v_c$ is defined as such that, if the joint began moving at
@@ -63,7 +62,7 @@ introduced \eqref{eq:xerr}.  Defining $\hat{u}$ as the sign of the distance to
 the goal, $v_c$ is related to $x_g$ and $x_{err}$ quadratically in
 \eqref{eq:vc2}.  Solving for $v_c$ using the quadratic formula produces in
 general complex roots due to the possibility of negative $v_0$ or $x_g$.  In
-]\eqref{eq:vcrit}, $v_0*\hat{u}$ is the velocity wrt the goal direction,
+]\eqref{eq:vcrit}, $v_0 \cdot \hat{u}$ is the velocity towards the goal direction,
 producing a positive term if the signs of both terms match. This result will
 always produce a real value for all $v_0$ and $x_g$.
 %TODO: Prove this? it should be possible to plot the root as a surface over v_0

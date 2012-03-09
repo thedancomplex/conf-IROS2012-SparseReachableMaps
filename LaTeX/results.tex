@@ -1,10 +1,11 @@
 \section{RESULTS}
 The system successfully ran generating valid trajectories.    The commanded trajectory produces the desired velocity of 4.9m/s.  The joint position of the physical joints were logged during runtime.  The velocity and acceleration of the end-effector for the commanded trajectory and the recorded runtime log in the velocity phase can be seen Fig~\ref{fig:posPlot}.  The end effector had large accelerations present when run on the physical system.  
 
-\begin{figure}[thpb]\label{fig:velosPlot}
+\begin{figure}[thpb]
   \centering
 \includegraphics[width=1.0\columnwidth]{./MATLAB/throwTrajRSPplot.pdf}
-  \caption{Right shoulder pitch commanded and measured motion profile; Position (top), Velocity (middle), Acceleration (bottom).  The is the result of running the trajectory shown in Fig.~\ref{fig:figThrow} and Fig.~\ref{fig:3dThrowReal}}
+  \caption{Right shoulder pitch commanded and measured motion profile; Position (top), Velocity (middle), Acceleration (bottom).  The is the result of running the trajectory shown in Fig.~\ref{fig:fThrow} and Fig.~\ref{fig:3dThrowReal}}
+  \label{fig:velosPlot}
 \end{figure}
 
 
@@ -12,10 +13,11 @@ The end effector has large accelerations present because some of the actuators a
 
 
 
-\begin{figure}[thpb]\label{fig:posPlot}
+\begin{figure}[thpb]
   \centering
 \includegraphics[width=1.0\columnwidth]{./MATLAB/throwTrajRSPacc.pdf}
-  \caption{The velocity and acceleration of the end-effector for the commanded trajectory and the recorded runtime log in the velocity phase; Velocity (top), Acceleration (bottom).  The is the result of running the trajectory shown in Fig.~\ref{fig:figThrow} and Fig.~\ref{fig:3dThrowReal}.}
+  \caption{The velocity and acceleration of the end-effector for the commanded trajectory and the recorded runtime log in the velocity phase; Velocity (top), Acceleration (bottom).  The is the result of running the trajectory shown in Fig.~\ref{fig:fThrow} and Fig.~\ref{fig:3dThrowReal}.}
+  \label{fig:posPlot}
 \end{figure}
 
 

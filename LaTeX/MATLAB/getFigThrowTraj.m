@@ -98,11 +98,11 @@ legend('Sparse Reachable Map','Velocity Phase L_d', 'Setup Phase' ,'FontSize', l
 % % % legend('Reachable Points')
 % % % %title('Sparse Reachable Region for Right Arm (Y=-0.21m to -0.22m)','FontSize',titleSize)
 % % % title('Sparse Reachable Map Cross Section for Right Arm (Y=-0.21m to -0.22m)','FontSize',titleSize)
-disp('resize then press ENTER')
-pause();
-
-%savefig('fig4p8.pdf','pdf')
-tname = 'throwTraj3D.pdf';
-saveas(gca,tname);
-system(['pdfcrop ',tname,' ',tname]);
+% disp('resize then press ENTER')
+% pause();
+% 
+% %savefig('fig4p8.pdf','pdf')
+% tname = 'throwTraj3D.pdf';
+% saveas(gca,tname);
+% system(['pdfcrop ',tname,' ',tname]);
 
