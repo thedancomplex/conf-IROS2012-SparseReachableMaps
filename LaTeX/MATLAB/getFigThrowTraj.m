@@ -23,6 +23,8 @@ x = get(get(gca,'Children'),'XData');
 
 y = get(get(gca,'Children'),'YData');
 figure
+labelSize   =   14;
+titleSize   =   16;
 
 %% trajectory
 xTraj   =   x{3};
@@ -34,6 +36,30 @@ zmin    =   -0.218;
 zmax    =   abs(xmin-xmax)*tand(gD)+zmin;
 zTraj   =   zmin:abs(zmin-zmax)/(length(xTraj)-1):zmax*ones(length(xTraj),1);
 
+%% new Throing Traj
+n       =   6000;   % number of points to use
+X       =   x{4};
+Y       =   -y{4};
+X       =   X(1:n);
+Y       =   Y(1:n);
+ss = 1;
+plot(X,-Y,'.','LineWidth',0.1,'MarkerSize',ss)
+hold on
+plot(xTraj,-yTraj,'ro-','LineWidth',5)
+
+nn      =   length(y{1});        %% index to stop at
+xs      =   x{1};
+xs      =   xs(1:nn);
+ys      =   -y{1};
+ys      =   ys(1:nn);
+zstart  =   -0.2;
+zs      =   zstart:-(abs(zstart-zTraj(1)))/(nn-1):zTraj(1);
+
+plot(xs,-ys,'g','LineWidth',4);
+xlabel({'Z Position (meters)'},'FontSize', labelSize)
+ylabel({'X Position (meters)'},'FontSize', labelSize)
+title({'Sparse Reachable Map Cross Section for Right Arm'; 'with setup phase and velocity trajectory L_d. X-Z view'},'FontSize',titleSize)
+figure
 %% reachaible area
 n       =   6000;    % number of points to use
 X       =   x{4};

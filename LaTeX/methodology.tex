@@ -56,7 +56,7 @@ The end effector position and the joint angles used are recorded.  This process 
 
 
 
-\subsection{Trajectory Generation}
+\subsection{Trajectory Generation}\label{sec:trajGen}
 An end-effector velocity, $V_e$, is chosen based on target location and the well known equations of projectile motion.  $V_e$ must be held for a time span of $t_e$, the release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $V_e$ immediately preceding time span $t_e$ must be less then or equal to the magnitude of $V_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
 
 A line, $L_d$, in $R^3$ is created with the origin $(x_0, y_0, z_0)$ in the direction of $V_e$.  Each subsequent point in the line $(X_1, Y_1, Z_1)$, $(X_2, Y_2, Z_2)$ $\cdots$ $(X_n, Y_n, Z_n)$ are separated by a time span $T_r$.
@@ -150,7 +150,7 @@ All subsequent points in $L_d$ must fall within some Euclidean distance $d$ from
 
 Once an $L_d$ is found that fits the above criteria the inverse kinematic solution must be found for each point and checked for reachability.  Smaller values of $d$ will increase the probability $L_d$ is within the reachable area defined in the SRM however more iterations will be required to find a valid $L_d$.  Larger values of $d$ will decrease the number of iterations needed to find a valid $L_d$ however the probability of $L_d$ being in the reachable area is decreased.
 
-\subsection{Inverse Kinematics}
+\subsection{Inverse Kinematics}\label{sec:ik}
 The trajectory $L_d$ has one point with a known kinematic solution, $L_d(0)$.  The kinematic solutions for points $L_d(1) \rightarrow L_d(n)$ are unknown.  Mapping the robot's configuration $q \in Q$ to the desired end-effector goal $x_g \in X$, where $Q$ is the robot's configuration space and $X$ is in $R^3$, is done using Jacobian Transpose Controller used by Weghe et al.\cite{4813913}.  Weghe shows the Jacobian as a linear map from the tangent space of $Q$ to $X$ and is express as
 
 \begin{equation}

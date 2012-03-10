@@ -1,4 +1,4 @@
-\subsection{On-Line Trapezoidal Motion Profile}
+\subsection{On-Line Trapezoidal Motion Profile}\label{sec:trap}
 
 The robot's starting position $x_0$ is not guaranteed to be the same as the
 first point in the velocity trajectory $L_d$.  To avoid over large
@@ -50,21 +50,23 @@ end by decelerating at the acceleration limit to the goal position. Rewriting
 \eqref{eq:trapslope} slightly, the deceleration (stopping) distance $d_s$ can be found
 from the current velocity $v_0$ in \eqref{eq:decdist}. As long as the goal
 distance and deceleration distance are equal, then the controller simply
-needs to decelerate at the maximum rate to come to rest at the goal. At a given
-time step, the controller only needs to drive the joint to the sliding surface. To be on this surface, the current velocity
-must equal the critical velocity for the current goal distance.
+needs to decelerate at the maximum rate to come to rest at the goal.
+Conversely, for the current goal distance, there is a critical velocity $v_c$
+such that, if the joint began moving at this velocity in the following
+timestep, it could decelerate at the maximum rate to reach the position goal.
+The controller's action is simply to minimize the error between $v_c$ and $v$,
+the output velocity of the controller at each timestep.
 
-The critical velocity $v_c$ is defined as such that, if the joint began moving at
-this velocity starting at the following time-step, it could decelerate at
-maximum rate to zero velocity, stopping at the position goal. Since the joint
-will still move during the following time-step, an error distance $x_{err}$ is
-introduced \eqref{eq:xerr}.  Defining $\hat{u}$ as the sign of the distance to
-the goal, $v_c$ is related to $x_g$ and $x_{err}$ quadratically in
-\eqref{eq:vc2}.  Solving for $v_c$ using the quadratic formula produces in
-general complex roots due to the possibility of negative $v_0$ or $x_g$.  In
-]\eqref{eq:vcrit}, $v_0 \cdot \hat{u}$ is the velocity towards the goal direction,
-producing a positive term if the signs of both terms match. This result will
-always produce a real value for all $v_0$ and $x_g$.
+Since the joint is moving with velocity $v_0$ during a current time-step, some
+initial distance $x_{err}$ \eqref{eq:xerr} is travelled before the joint can be
+affected. Defining $\hat{u}$ as the sign of the distance to the goal, $v_c$ is
+related to $x_g$ and $x_{err}$ quadratically in \eqref{eq:vc2}. This equation
+assumes simple trapezoidal integration. Solving for $v_c$ using the quadratic
+formula produces in general complex roots due to the possibility of negative
+$v_0$ or $x_g$.  In \eqref{eq:vcrit}, $v_0*\hat{u}$ is the current velocity
+relative to the goal direction, producing a positive term if the signs of both
+terms match. This result will always produce a real value for all $v_0$ and
+$x_g$.
 %TODO: Prove this? it should be possible to plot the root as a surface over v_0
 %and x_g
 
