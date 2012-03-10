@@ -1,14 +1,14 @@
 \section{EXPERIMENT}\label{sec:exp}
-The goal of throwing a projectile was set to 3.0m the maximum usable distance in the SISTR system as described in Section~\ref{sec:intro}.  The target is placed directly in front of the robot.  The release point for the projectile motion calculations was set to the mean of the right arm's reachable area, 0.8m from the ground in $z$.  This resulted in a throwing velocity of 4.9m/s at $[\Theta, \Psi, \Phi] =[0.0^o,45.0^o, 3.8^o]$.  This velocity was required to be sustained for 0.1sec due to the speed and accuracy of the gripper's release.  This velocity duration and direction forced the trajectory to produce an underhand throwing gesture.  The projectile is a standard racquetball measuring 57mm in diameter and weighting 42.7g.
+The goal of throwing a projectile was set to 3.0m, the maximum usable distance in the SISTR system as described in Section~\ref{sec:intro}.  The target is placed directly in front of the robot.  Using the SRM the release point for the projectile motion calculations was set to the mean of the right arm's reachable area, 0.8m from the ground in $z$.  This resulted in a throwing velocity of 4.9m/s at $[\Theta, \Psi, \Phi] =[0.0^o,45.0^o, 3.8^o]$.  This velocity was required to be sustained for 0.1sec due to the speed and accuracy of the gripper's release.  This velocity duration and direction forced the trajectory to produce an underhand throwing gesture.  The projectile is a standard racquetball measuring 57mm in diameter and weighting 42.7g.  The light weight racquetball ball was chosen to assist in not causing instability.
 
 $L_d$ and the setup trajectory are created using the method shown in Section~\ref{sec:methodology} and following all specified constraints.  Fig.~\ref{fig:3dThrowPlot1} shows $L_d$ and the setup trajectory plotted within the SRM.
 
-\begin{figure}[thpb]
-  \centering
-\includegraphics[width=1.0\columnwidth]{./MATLAB/throwTraj3D.pdf}
-  \caption{Sparse Reachable Map Cross Section for Right Arm with setup phase and velocity trajectory $L_d$ }
-  \label{fig:3dThrowPlot1}
-\end{figure}
+%\begin{figure}[thpb]
+%  \centering
+%\includegraphics[width=1.0\columnwidth]{./MATLAB/throwTraj3D.pdf}
+%  \caption{Sparse Reachable Map Cross Section for Right Arm with setup phase and velocity trajectory $L_d$ }
+%  \label{fig:3dThrowPlot1}
+%\end{figure}
 
 
 \begin{figure}[thpb]
@@ -21,7 +21,7 @@ $L_d$ and the setup trajectory are created using the method shown in Section~\re
 
 
 
-The trajectory was run on Jaemi Hubo with a position command period of 0.01s.  Fig~\ref{fig:3dThrowReal} shows the side profile of the Jaemi Hubo successfully running the trajectory.  The trajectory shown in Fig~\ref{fig:3dThrowReal} is considered an underhand throw, overhand and sidearm throws are also created with this method.
+The trajectory was run on Jaemi Hubo with a position command period $T_r$ of 0.01s.  Fig~\ref{fig:3dThrowReal} shows the side profile of the Jaemi Hubo successfully running the trajectory.  The trajectory shown in Fig~\ref{fig:3dThrowReal} is considered an underhand throw, overhand and sidearm throws are also created with this method.
 
 \begin{figure}[thpb]
   \centering

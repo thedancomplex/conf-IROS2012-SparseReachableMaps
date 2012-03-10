@@ -6,7 +6,7 @@ accelerations when giving this step input from $x_0$ to $L_d(0)$ an on-line
 trapezoidal motion profile (TMP) was used to generate joint space commands with
 the desired limited angular acceleration and velocity.  The TMP was only active
 during the setup phase where the robot's end-effector moves from $x_0$ to
-$L_d(0)$.
+$L_d(0)$.  This is because the TMP's inherent nature has the potential to adversely effect the desired velocity in $R^3$ under high angular velocity and acceleration conditions in joint space.
 
 The TMP was designed to limit the applied angular velocity and acceleration in
 joint space and to prevent over-current/torque. An important advantage over
