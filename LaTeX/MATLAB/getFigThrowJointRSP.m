@@ -293,6 +293,7 @@ plot(t(3:length(t)),ddA,'r--','LineWidth',lineWidth)
 ylabel('Acceleration (rad/sec^2)','FontSize', labelSize)
 xlabel('Time (sec)','FontSize', labelSize)
 axis([0 0.3 -5000 5000]);
+grid on
 
 
 %% for position space
@@ -418,11 +419,11 @@ xDist   = atand(diff(yTraj)/diff(xTraj));
 % % % %title('Sparse Reachable Region for Right Arm (Y=-0.21m to -0.22m)','FontSize',titleSize)
 % % % title('Sparse Reachable Map Cross Section for Right Arm (Y=-0.21m to -0.22m)','FontSize',titleSize)
 % disp('resize then press ENTER')
-pause();
-% 
-% %savefig('fig4p8.pdf','pdf')
-%tname = 'throwTrajRSPacc.pdf';
-tname = 'throwTrajRSPplot.pdf';
-saveas(gca,tname);
-system(['pdfcrop ',tname,' ',tname]);
+% pause();
+% % 
+% % %savefig('fig4p8.pdf','pdf')
+% %tname = 'throwTrajRSPacc.pdf';
+% tname = 'throwTrajRSPplot.pdf';
+% saveas(gca,tname);
+% system(['pdfcrop ',tname,' ',tname]);
 
