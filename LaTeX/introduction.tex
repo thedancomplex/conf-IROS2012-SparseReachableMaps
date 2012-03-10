@@ -1,13 +1,16 @@
+\section{INTRODUCTION}\label{sec:intro}
+
 This work focuses on creating and testing valid trajectories for high degree of freedom (DOF), high-gain, position controlled mechanisms that results in the desired end-effector velocity.  Throwing and hitting are examples of end-effector velocity control.  The goal is to have the end-effector moving at a specific rate in a specific direction.  It is also a task that demands whole-body coordination; when the arm moves quickly, as in the case of pitching, such upper-body motions, if not coordinated with the lower-body, can cause the humanoid to lose balance.  The overarching goal of this work is to create stable whole-body motions that reliably move the end-effector at the desired velocity while retaining stability.  Fig.~\ref{fig:huboOneFoot} shows this overarching goal as an example of a stable human like pose when preparing to throw a ball.  The focus of this work is the first required step throwing with a high gain position controlled robot; throwing an object without self-collision in the absence of knowledge of the full reachable area of the robot.  The resulting system is capable of creating trajectories for overhand and underhand throwing motions.  This paper illustrates the trajectory-based approach with underhand throwing, but can also be applied to overhand cases as well.
 
-The location in space where the desired end-effector velocity occurs is important in instances such as tennis, ping-pong, and other hitting activities where the end-effector does not control the object through out the entire motion.  Throwing is an example of when the end-effector's velocity holds a higher priority over the position.  
-
-\begin{figure}[thpb]
+\begin{figure}[thpb!]
   \centering
 \includegraphics[width=1.0\columnwidth]{./pictures/huboThrow.png}
   \caption{Jaemi Hubo (Hubo KHR-4) demonstrating the initial pose for the overarching goal of creating a full body, human-like, stable, motion for throwing.}
   \label{fig:huboOneFoot}
 \end{figure}
+
+The location in space where the desired end-effector velocity occurs is important in instances such as tennis, ping-pong, and other hitting activities where the end-effector does not control the object through out the entire motion.  Throwing is an example of when the end-effector's velocity holds a higher priority over the position.  
+
 
 Mechanisms with only a single degree of freedom are restricted to throwing in a plane.   2-DOF mechanisms are able to throw in $R^3$ space with the correct kinematic structure.  Such a mechanism can choose its release point or its end-effector velocity but not both.  Mechanisms containing 3 or more DOF with the correct kinematic structure are able to throw in $R^3$ and choose both the release point and the end-effector velocity.  
 

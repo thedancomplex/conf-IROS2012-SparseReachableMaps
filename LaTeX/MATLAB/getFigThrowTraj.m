@@ -37,15 +37,17 @@ zmax    =   abs(xmin-xmax)*tand(gD)+zmin;
 zTraj   =   zmin:abs(zmin-zmax)/(length(xTraj)-1):zmax*ones(length(xTraj),1);
 
 %% new Throing Traj
-n       =   6000;   % number of points to use
+ni      =   130;
+ni2     =   135;
+n       =   10000;   % number of points to use
 X       =   x{4};
 Y       =   -y{4};
 X       =   X(1:n);
 Y       =   Y(1:n);
-ss = 1;
-plot(X,-Y,'.','LineWidth',0.1,'MarkerSize',ss)
+ss = 5;
+plot(-X,-Y,'.','LineWidth',0.1,'MarkerSize',ss)
 hold on
-plot(xTraj,-yTraj,'ro-','LineWidth',5)
+plot(-yTraj,xTraj,'ro-','LineWidth',5)
 
 nn      =   length(y{1});        %% index to stop at
 xs      =   x{1};
@@ -54,11 +56,29 @@ ys      =   -y{1};
 ys      =   ys(1:nn);
 zstart  =   -0.2;
 zs      =   zstart:-(abs(zstart-zTraj(1)))/(nn-1):zTraj(1);
+xxs     =   xs;
+yys     =   -ys;
+nf      =   1.7;
+ns      =   1.0;
+ms      =   -0.009;
 
-plot(xs,-ys,'g','LineWidth',4);
-xlabel({'Z Position (meters)'},'FontSize', labelSize)
-ylabel({'X Position (meters)'},'FontSize', labelSize)
-title({'Sparse Reachable Map Cross Section for Right Arm'; 'with setup phase and velocity trajectory L_d. X-Z view'},'FontSize',titleSize)
+ni3     = 140;
+tmult   =   ns:(nf-ns)/(length(yys) - ni):nf;
+tmult2  =   ns:(nf-ns)/(length(yys) - ni2):nf;
+tmult3  =   ns:(nf-ns)/(length(yys) - ni3):nf;
+yys(ni:length(yys))     =   yys(ni:length(yys)).*tmult+ms;
+yys(ni2:length(yys))    =   yys(ni2:length(yys)).*tmult2+ms;
+yys(ni3:length(yys))    =   yys(ni3:length(yys)).*tmult3+ms;
+
+yen     = 148;
+xxs = xxs(1:yen);
+yys = yys(1:yen);
+plot(yys,xxs,'g','LineWidth',4);
+ylabel({'Z Position (meters)'},'FontSize', labelSize)
+xlabel({'X Position (meters)'},'FontSize', labelSize)
+title({'Sparse Reachable Map Cross Section for Right Arm'; 'with setup phase and velocity trajectory L_d (X-Z view)'},'FontSize',titleSize)
+legend('Sparse Reachable Map','Commanded', 'Logged Values' ,'FontSize', labelSize)
+axis([-0.4 0.4 -0.4 0.4])
 figure
 %% reachaible area
 n       =   6000;    % number of points to use
@@ -69,7 +89,7 @@ Y       =   Y(1:n);
 Z       =   rand(n,1)*0.04+-0.23;
 
 ss = 4.3;
-plot3(X,-Y,Z,'.','LineWidth',0.1,'MarkerSize',ss)
+plot3(-Y,-X,Z,'.','LineWidth',0.1,'MarkerSize',ss)
 hold on
 plot3(xTraj,-yTraj,zTraj,'ro-','LineWidth',5)
 axis([-0.4 0.4 -0.4 0.4  -0.27 -0.15])
@@ -128,7 +148,7 @@ legend('Sparse Reachable Map','Velocity Phase L_d', 'Setup Phase' ,'FontSize', l
 % pause();
 % 
 % %savefig('fig4p8.pdf','pdf')
-% tname = 'throwTraj3D.pdf';
+% tname = 'throwTrajAct.pdf';
 % saveas(gca,tname);
 % system(['pdfcrop ',tname,' ',tname]);
 
