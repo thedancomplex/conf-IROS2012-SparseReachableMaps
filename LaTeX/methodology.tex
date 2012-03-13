@@ -64,7 +64,7 @@ A line, $L_d$, in $R^3$ is created with the origin $(x_0, y_0, z_0)$ in the dire
 The desired velocity is defined as
 
 \begin{equation}
-V_e = V_xi+V_yj+V_zk
+V_d = [V_xi, V_yj, V_zk]
 \end{equation}
 
 %\begin{equation}
@@ -82,44 +82,58 @@ V_e = V_xi+V_yj+V_zk
 The line $L_d$ is defined as
 
 \begin{equation}
-L_d(n) = X_ni + Y_nj + Z_nk
+L_d(n) = [X_ni, Y_nj , Z_nk]
 \end{equation}
 
-Where $n$ is the current zero based time step index value for the time span $t_e$.  The change between time step $n$ and $n+1$ in respect to time of $L_d$  must be equal to our desired velocity $V_e$.
+Where $n$ is the current zero based time step index value for the time span $t_e$.  The change in $L_d$ between time step $0$ and $n$ must be equal to our desired velocity $V_d$.
 
 %\begin{equation}
 %\Delta L_d(N)_n^{n+1} = \Delta Xi + \Delta Yj + \Delta Zk
 %\end{equation}
 
 \begin{equation}
-\frac{\Delta L_d|_n^{n+1}}{T_r} = V_e
+\frac{\Delta L_d|_{0}^{n}}{n \cdot T_r} = V_d
 \end{equation}
+
+%\begin{equation}
+%V_di+V_dj+V_dk = \frac{\Delta Xi + \Delta Yj + \Delta Zk}{T_r}
+%\end{equation}
+
+%\begin{equation}
+%V_d = \frac{[\Delta Xi, \Delta Yj, \Delta Zk]}{T_r}\Bigr\rvert_{n-1}^{n}
+%\end{equation}
+
+%Break up into its $i$, $j$, and $k$ components.
+Thus
+\begin{equation}
+V_d = \frac{L_d(n) - L_d(0)}{n \cdot T_r}
+\end{equation}
+
+%\begin{eqnarray} 
+%V_di & = &  \frac{\Delta Xi}{T_r}  =  \frac{X_{n+1} - X_n}{T_r}\\
+%V_dj & = &  \frac{\Delta Yi}{T_r}  =  \frac{Y_{n+1} - Y_n}{T_r}\\
+%V_dk & = &  \frac{\Delta Zi}{T_r}  =  \frac{Z_{n+1} - Z_n}{T_r}
+%\end{eqnarray}
+The line $L_d$ at time step $n$ can now be defined in terms of $V_d$, $T_r$, the origin $L_d(0)$, and the current zero based time step index value $n$.
 
 \begin{equation}
-V_di+V_dj+V_dk = \frac{\Delta Xi + \Delta Yj + \Delta Zk}{T_r}
+L_d(n) = n \cdot T_r \cdot V_d + L_d(0)
 \end{equation}
 
-Break up into its $i$, $j$, and $k$ components.
 
-\begin{eqnarray} 
-V_di & = &  \frac{\Delta Xi}{T_r}  =  \frac{X_{n+1} - X_n}{T_r}\\
-V_dj & = &  \frac{\Delta Yi}{T_r}  =  \frac{Y_{n+1} - Y_n}{T_r}\\
-V_dk & = &  \frac{\Delta Zi}{T_r}  =  \frac{Z_{n+1} - Z_n}{T_r}
-\end{eqnarray}
+%Solve for the current step $n$ in terms of the origin $(X_0, Y_0, Z_0)$
 
-Solve for the current step $n$ in terms of the origin $(X_0, Y_0, Z_0)$
+%\begin{eqnarray} 
+%X_n & = & n(V_di \cdot T_r) + X_0  \\
+%Y_n & = & n(V_dj \cdot T_r) + Y_0  \\
+%Z_n & = & n(V_dk \cdot T_r) + Z_0  
+%\end{eqnarray}
 
-\begin{eqnarray} 
-X_n & = & n(V_di \cdot T_r) + X_0  \\
-Y_n & = & n(V_dj \cdot T_r) + Y_0  \\
-Z_n & = & n(V_dk \cdot T_r) + Z_0  
-\end{eqnarray}
+%The line $L_d$ can now be defined in terms of the origin $(X_0, Y_0, Z_0)$ and the current zero based time step index value $n$.
 
-The line $L_d$ can now be defined in terms of the origin $(X_0, Y_0, Z_0)$ and the current zero based time step index value $n$.
-
-\begin{equation}
-L_d(n) = n \cdot V_d \cdot T_r + L_d(0)
-\end{equation}
+%\begin{equation}
+%L_d(n) = n \cdot V_d \cdot T_r + L_d(0)
+%\end{equation}
 
 
 Where 
@@ -140,7 +154,7 @@ L_d(0) = (X_0, Y_0, Z_0)
 %				 + (n \cdot V_dk \cdot T_r + Z_0)k
 %\end{equation}
 
-The line $L_d$ trajectory that the robot's end effector must follow during the time span $t_e$.  A starting point $L_d(0)$ must be found so that $L_d$ is within the reachable area.  $L_d(0)$ is set to a random starting points chosen within the within SRM.  
+The line $L_d$ is the trajectory the robot's end effector must follow during the time span $t_e$.  A starting point $L_d(0)$ must be found so that $L_d$ is within the reachable area.  $L_d(0)$ is set to a random starting points chosen within the within SRM.  
 
 \begin{equation}
 L_d(0) \in SRM
