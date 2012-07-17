@@ -4,15 +4,15 @@ To create a valid throwing trajectory for a high-DOF, high-gain, position contro
 \subsection{Self Collision Detection}\label{sec:selfCollision}
 Self collision is an important when dealing with a high degree of freedom robot.  Unwanted self collisions can cause permanent damage to the physical and electrical hardware as well as causing the robot not to complete the given task.
 
-To aid in the detection of self collisions a detailed model of the Hubo KHR-4 was made in the widely used open-source robot simulation environment OpenRAVE\cite{diankovThesis}.  The model was created by exporting the three dimensional schematics that the physical robot was created with, to a format that OpenRAVE can use.  This was done in order to ensure an accurate and detailed model.  For these experiments we needed the external boundaries only; the internal geometry was replaced with a simplistic representation.  The external shell is the only part now visible, see Fig~\ref{fig:vHubo} (Left).  The Proximity Query Package (PQP) was used to detect collisions between any two pieces of the robot's external shell.  Due to the high polygon count of the external shell the computation time of detecting a collision was on the magnitude of seconds.  It is advantageous to reduce this time if the system is to run live on the robot.  Computation time is decreased significantly when boundary/collision geometries are simplified due to the lower polygon count.  The collision geometries were further simplified to decrease computation time by making them primitives such as spheres, cylinder and boxes, see Fig~\ref{fig:vHubo} (Right). 
+To aid in the detection of self collisions a detailed model of the Hubo KHR-4 was made in the widely used open-source robot simulation environment OpenRAVE\cite{diankovThesis}.  The model was created by exporting the three dimensional schematics that the physical robot was created with, to a format that OpenRAVE can use.  This was done in order to ensure an accurate and detailed model.  For these experiments we needed the external boundaries only; the internal geometry was replaced with a simplistic representation.  The external shell is the only part now visible, see Fig~\ref{fig:vHuboSparse} (Center).  The Proximity Query Package (PQP) was used to detect collisions between any two pieces of the robot's external shell.  Due to the high polygon count of the external shell the computation time of detecting a collision was on the magnitude of seconds.  It is advantageous to reduce this time if the system is to run live on the robot.  Computation time is decreased significantly when boundary/collision geometries are simplified due to the lower polygon count.  The collision geometries were further simplified to decrease computation time by making them primitives such as spheres, cylinder and boxes, see Fig~\ref{fig:vHuboSparse} (Right). 
 
-\begin{figure}[thpb]
-  \centering
-%\includegraphics[width=0.5\columnwidth]{./pictures/hubo1s.png}\includegraphics[width=0.5\columnwidth]{./pictures/hubo2s.png}
-\includegraphics[width=0.5\columnwidth]{./pictures/final/hBody.png}\includegraphics[width=0.5\columnwidth]{./pictures/final/hCol.png}
-  \caption{OpenRAVE model of Hubo KHR-4. Left: Model with protective shells.  Right: Collision Geometry  }
-  \label{fig:vHubo}
-\end{figure}
+%\begin{figure}[thpb]
+%  \centering
+%%\includegraphics[width=0.5\columnwidth]{./pictures/hubo1s.png}\includegraphics[width=0.5\columnwidth]{./pictures/hubo2s.png}
+%\includegraphics[width=0.5\columnwidth]{./pictures/final/hBody.png}\includegraphics[width=0.5\columnwidth]{./pictures/final/hCol.png}
+%  \caption{OpenRAVE model of Hubo KHR-4. Left: Model with protective shells.  Right: Collision Geometry  }
+%  \label{fig:vHubo}
+%\end{figure}
 
 Joint limitations are added to the model to mimic the physical robot.  The model can be commanded the same configurations as the physical robot.  A pose is commanded to the model, PQP searches for any collisions.  With the simplified collision geometry self collisions are detected on the order of milliseconds.  If there are no collisions then the pose can be applied to the physical robot.  A 5\% increase in volume between the simplified collision geometry and the high polygon geometry was added to ensure all of the physical robot's movements will not collide due to minor calibration errors.
 
@@ -34,30 +34,31 @@ T = \chi_1 \cdot \chi_2 \cdot ... \cdot \chi_n
 %\chi = \begin{bmatrix} R & \left[ \begin{array}{c} x \\ y \\ z \right]\end{array} \\ \left[ \begin{array}{cc} 0 & 0 & 0 & 1 \end{array} \right]  \end{bmatrix} 
 %\chi = \begin{bmatrix} xz & xw \\ yz & yw \end{bmatrix} = \left[ \begin{array}{c} x \\ y \end{array} \right] \times \left[ \begin{array}{cc} z & w \end{array} \right] 
 %\chi = \begin{bmatrix} R & T \\ 0 & 1 \end{bmatrix}
-Where $\chi_i$ is the transformation between joint $i-1$ and $i$, $R_i$ is the rotation of joint $i$ in respect to joint $i-1$ and $\Gamma_i$ is the translation of joint $i$ in respect to joint $i-1$, and $n$ is the number of joints in the kinematic chain.
+where $\chi_i$ is the transformation between joint $i-1$ and $i$, $R_i$ is the rotation of joint $i$ in respect to joint $i-1$ and $\Gamma_i$ is the translation of joint $i$ in respect to joint $i-1$, and $n$ is the number of joints in the kinematic chain.
 
 The end effector position and the joint angles used are recorded.  This process is repeated multiple times to form a sparse representation of reachable end-effector positions in $R^3$ and the corresponding joint angles in joint space.  The resulting representation is called the Sparse Reachable Map (SRM).  Fig.~\ref{fig:sparseRegion} shows that the valid end-effector locations of the right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Fig.~\ref{fig:vHuboSparse} shows the SRM of the entire right arm.  The SRM is used to calculate valid movement trajectories.
 
 
 \begin{figure}[thpb]
   \centering
-\includegraphics[width=1.0\columnwidth]{./MATLAB/reachable2DofR4p8.pdf}
-  \caption{Sparse region of reachable locations for the robot's right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Region created by randomly sampling from joint space.  All shown points are valid kinematic solutions that do not cause a self collision.}
+%\includegraphics[width=1.0\columnwidth]{./MATLAB/reachable2DofR4p8.pdf}
+\includegraphics[width=1.0\columnwidth]{./MATLAB/throwTrajAct.pdf}
+  \caption{Sparse region of reachable locations for the robot's right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Region created by randomly sampling from joint space.  (Blue) Points with valid kinematic solutions that do not cause a self collision.  (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.}
   \label{fig:sparseRegion}
 \end{figure}
 
 \begin{figure}[thpb]
   \centering
 %\includegraphics[width=0.5\columnwidth]{./pictures/hubo1s.png}\includegraphics[width=0.5\columnwidth]{./pictures/hubo2s.png}
-\includegraphics[width=0.5\columnwidth]{./pictures/final/SRM.png}\includegraphics[width=0.5\columnwidth]{./pictures/final/ThrowTrajDiag.png}
-  \caption{OpenRAVE model of Hubo KHR-4. Left: Model with SRM of right arm.  Right: SRM (blue) with setup and velocity phase trajectories (green)  }
+\includegraphics[width=0.36\columnwidth]{./pictures/final/SRM.png}\includegraphics[width=0.36\columnwidth]{./pictures/final/ThrowTrajDiag.png}\includegraphics[width=0.28\columnwidth]{./pictures/final/hCol.png}
+  \caption{OpenRAVE model of Hubo KHR-4. Left: Model with SRM of right arm.  Center: SRM (blue) with setup and velocity phase trajectories (green) Right: Collision Geometry  }
   \label{fig:vHuboSparse}
 \end{figure}
 
 
 
 \subsection{Trajectory Generation}\label{sec:trajGen}
-An end-effector velocity, $V_e$, is chosen based on target location, the well known equations of projectile motion, and the required velocity duration $t_e$.  $V_e$ must be held for a time span of $t_e$, the release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $V_e$ immediately preceding time span $t_e$ must be less then or equal to the magnitude of $V_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
+An end-effector velocity, $V_e$, is chosen based on target location, the well known equations of projectile motion, and the required velocity duration $t_e$.  $V_e$ must be held for a time span of $t_e$, the release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $V_e$ immediately preceding time span $t_e$ must be less than or equal to the magnitude of $V_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
 
 A line, $L_d$, in $R^3$ is created with the origin $(x_0, y_0, z_0)$ in the direction of $V_e$.  Each subsequent point in the line $(X_1, Y_1, Z_1)$, $(X_2, Y_2, Z_2)$ $\cdots$ $(X_n, Y_n, Z_n)$ are separated by a time span $T_r$.
 
@@ -85,7 +86,7 @@ The line $L_d$ is defined as
 L_d(n) = [X_ni, Y_nj , Z_nk]
 \end{equation}
 
-Where $n$ is the current zero based time step index value for the time span $t_e$.  The change in $L_d$ between time step $0$ and $n$ must be equal to our desired velocity $V_d$.
+where $n$ is the current zero based time step index value for the time span $t_e$.  The change in $L_d$ between time step $0$ and $n$ must be equal to our desired velocity $V_d$.
 
 %\begin{equation}
 %\Delta L_d(N)_n^{n+1} = \Delta Xi + \Delta Yj + \Delta Zk
@@ -136,7 +137,7 @@ L_d(n) = n \cdot T_r \cdot V_d + L_d(0)
 %\end{equation}
 
 
-Where 
+where 
 
 \begin{equation}
 L_d(0) = (X_0, Y_0, Z_0)
@@ -154,7 +155,7 @@ L_d(0) = (X_0, Y_0, Z_0)
 %				 + (n \cdot V_dk \cdot T_r + Z_0)k
 %\end{equation}
 
-The line $L_d$ is the trajectory the robot's end effector must follow during the time span $t_e$.  A starting point $L_d(0)$ must be found so that $L_d$ is within the reachable area.  $L_d(0)$ is set to a random starting points chosen within the within SRM.  
+The line $L_d$ is the trajectory the robot's end effector must follow during the time span $t_e$.  A starting point $L_d(0)$ must be found so that $L_d$ is within the reachable area.  $L_d(0)$ is set to a random starting points chosen within the SRM.  
 
 \begin{equation}
 L_d(0) \in SRM
@@ -183,7 +184,7 @@ e = x_g - x
 \dot{q} = kJ^Te
 \end{equation}
 
-Where k is a positive gain and self collisions are ignored.  The instantaneous motion of the end-effector is given by
+where k is a positive gain and self collisions are ignored.  The instantaneous motion of the end-effector is given by
 
 \begin{equation}
 \dot{x} = J\dot{q} = J(kJ^Te)
@@ -213,16 +214,16 @@ The pose $q_1$ can now be calculated
 q_1 = q_0 + \dot{q}_0 = q_0 + kJ^Te|_{x}^{x_g}
 \end{equation}
 
-Where $x_g = L_d(0)$ and $x = L_d(1)$.  $L_d(1)$ is now known both in $X$ and in $Q$.  Now $x = L_d(1)$ and the process is repeated until all points in $L_d$ are known both in $X$ and in $Q$.
+where $x_g = L_d(0)$ and $x = L_d(1)$.  $L_d(1)$ is now known both in $X$ and in $Q$.  Now $x = L_d(1)$ and the process is repeated until all points in $L_d$ are known both in $X$ and $Q$.
 
 
 
 
-\begin{figure}[thpb]
-  \centering
-\includegraphics[width=1.0\columnwidth]{./MATLAB/throwTraj3D.pdf}
-  \caption{Sparse Reachable Map Cross Section for Right Arm with setup phase and velocity trajectory $L_d$ }
-  \label{fig:3dThrowPlot1}
-\end{figure}
+%\begin{figure}[thpb]
+%  \centering
+%\includegraphics[width=1.0\columnwidth]{./MATLAB/throwTraj3D.pdf}
+%  \caption{Sparse Reachable Map Cross Section for Right Arm with setup phase and velocity trajectory $L_d$ }
+%  \label{fig:3dThrowPlot1}
+%\end{figure}
 
 \input{trapezoidalmotion}
