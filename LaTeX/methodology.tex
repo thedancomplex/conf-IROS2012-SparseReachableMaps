@@ -36,7 +36,7 @@ T = \left[\chi_1 \cdot \chi_2 \cdot ... \cdot \chi_n \right]
 %\chi = \begin{bmatrix} R & T \\ 0 & 1 \end{bmatrix}
 where $\chi_i$ is the transformation between joint $i-1$ and $i$, $R_i$ is the rotation of joint $i$ with respect to joint $i-1$ and $\Gamma_i$ is the translation of joint $i$ with respect to joint $i-1$, and $n$ is the number of joints in the kinematic chain.
 
-The end-effector position and the joint angles used are recorded.  This process is repeated multiple times to form a sparse representation of reachable end-effector positions in $R^3$ and the corresponding joint angles in joint space.  The resulting representation is called the Sparse Reachable Map (SRM).  Fig.~\ref{fig:sparseRegion} shows a cross section of the SRM about the right shoulder between -0.40 $m$ to 0.40 $m$ on X, -0.40 $m$ to 0.40 $m$ on Z, and -0.21 to -0.22 $m$ on Y.  The blue points show valid end-effector locations with known kinematic solution in joint space.  Fig.~\ref{fig:vHuboSparse} shows the SRM of the entire right arm.  The SRM is used to calculate valid movement trajectories.
+The end-effector position and the joint angles used are recorded.  This process is repeated multiple times to form a sparse representation of reachable end-effector positions in $R^3$ and the corresponding joint angles in joint space.  The resulting representation is called the Sparse Reachable Map (SRM).  Fig.~\ref{fig:sparseRegion} shows a cross section of the SRM about the right shoulder between -0.40 $m$ to 0.40 $m$ on X, \mbox{-0.40} $m$ to 0.40 $m$ on Z, and -0.21 to -0.22 $m$ on Y.  The blue points show valid end-effector locations with known kinematic solution in joint space.  Fig.~\ref{fig:vHuboSparse} shows the SRM of the entire right arm.  The SRM is used to calculate valid movement trajectories.
 
 
 \begin{figure}[thpb]
@@ -60,9 +60,9 @@ The end-effector position and the joint angles used are recorded.  This process 
 
 
 \subsection{Trajectory Generation}\label{sec:trajGen}
-An end-effector velocity, $\vec{V}_e$, is chosen based on target location, the well known equations of projectile motion, and the required velocity duration $t_e$.  $\vec{V}_e$ must be held for a time span of $t_e$. The release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $V_e$ immediately preceding time span $t_e$ must be less than or equal to the magnitude of $\vec{V}_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
+An end-effector velocity, $\vec{V}_e$, is chosen based on target location, the well known equations of projectile motion, and the required velocity duration $t_e$.  $\vec{V}_e$ must be held for a time span of $t_e$. The release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $\vec{V}_e$ immediately preceding time span $t_e$ must be less than or equal to the magnitude of $\vec{V}_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
 
-A line $l_d$ in $R^3$ that passes through $(X_0, Y_0, Z_0)$ in the direction of $\vec{V}_e$ is created.  $\vec{L}_d$ is the discrete representation of $l_d$.  Each point in $\vec{L}_d$, $(X_0, Y_0, Z_0)$, $(X_1, Y_1, Z_1)$ $\cdots$ $(X_n, Y_n, Z_n)$, are separated by a time span $T_r$.
+A line $\vec{l}_d$ in $R^3$ that passes through $(X_0, Y_0, Z_0)$ in the direction of $\vec{V}_e$ is created.  $\vec{L}_d$ is the discrete representation of $\vec{l}_d$.  Each point in $\vec{L}_d$, $(X_0, Y_0, Z_0)$, $(X_1, Y_1, Z_1)$ $\cdots$ $(X_n, Y_n, Z_n)$, are separated by a time span $T_r$.
 
 %A line, $L_d$, in $R^3$ is created with the origin $(x_0, y_0, z_0)$ in the direction of \vec{$V_e$}.  Each subsequent point in the line $(X_1, Y_1, Z_1)$, $(X_2, Y_2, Z_2)$ $\cdots$ $(X_n, Y_n, Z_n)$ are separated by a time span $T_r$.
 
@@ -178,7 +178,7 @@ The trajectory $\vec{L}_d$ has one point with a known kinematic solution in $R^3
 
   The Jacobian Transpose method is used because of the high DOF of the Hubo KHR-4.  Under the assumption of an obstacle-free environment the Jacobian Transpose Controller is guaranteed to reach the goal.  A proof is shown by Wolovich et al.\cite{4048118}.
 
-To drive the manipulator from its current position $x$ to the goal positions $x_g$ the error $e$ is computed and the control law is formed.
+To drive the manipulator from its current position $\vec{x}$ to the goal positions $\vec{x}_g$ the error $\vec{e}$ is computed and the control law is formed.
 
 \begin{equation}
 \vec{e} = \vec{x}_g - \vec{x}
@@ -218,7 +218,7 @@ The pose $\vec{q}_1$ can now be calculated
 \vec{q}_1 = \vec{q}_0 + \dot{\vec{q}}_0 = \vec{q}_0 + kJ^T\vec{e}|_{\vec{x}}^{\vec{x}_g}
 \end{equation}
 
-where $\vec{x}_g = \vec{L}_d(0)$ and $\vec{x} = \vec{L}_d(1)$.  $\vec{L}_d(1)$ is now known both in $X$ and in $Q$.  Now $\vec{x} = \vec{L}_d(1)$ and the process is repeated until all points in $L_d$ are known both in $X$ and $Q$.
+where $\vec{x}_g = \vec{L}_d(0)$ and $\vec{x} = \vec{L}_d(1)$.  $\vec{L}_d(1)$ is now known both in $X$ and in $Q$.  Now $\vec{x} = \vec{L}_d(1)$ and the process is repeated until all points in $\vec{L}_d$ are known both in $X$ and $Q$.
 
 
 

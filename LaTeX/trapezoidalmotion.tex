@@ -1,11 +1,11 @@
 \subsection{On-Line Trapezoidal Motion Profile}\label{sec:trap}
 
-The robot's starting position $x_0$ is not guaranteed to be the same as the
-first point in the velocity trajectory $L_d$.  To avoid over large
-accelerations when giving this step input from $x_0$ to $L_d(0)$ an on-line
+The robot's starting position $\vec{x}_0$ is not guaranteed to be the same as the
+first point in the velocity trajectory $\vec{L}_d$.  To avoid over large
+accelerations when giving this step input from $\vec{x}_0$ to $L_d(0)$ an on-line
 trapezoidal motion profile (TMP) was used to generate joint space commands with
 the desired limited angular acceleration and velocity.  The TMP was only active
-during the setup phase where the robot's end-effector moves from $x_0$ to
+during the setup phase where the robot's end-effector moves from $\vec{x}_0$ to
 $L_d(0)$.  This is because the TMP's inherent nature has the potential to adversely effect the desired velocity in $R^3$ under high angular velocity and acceleration conditions in joint space.
 
 The TMP was designed to limit the applied angular velocity and acceleration in
@@ -14,19 +14,34 @@ simply limiting output velocity and acceleration is that the TMP has little to
 no overshoot. When a clipped and rate-limited velocity profile is integrated,
 the resulting position trajectory may over or undershoot due to this non-linear
 system behavior.  The TMP accounts for the imposed limits inherently, and will
-arrive at a static goal without overshoot.
+arrive at a static goal without overshoot.  Table~\ref{table:trap} describes the three regions
+that make up the TMP.
 %TODO: Several statements in here are a bit conjectural
 
-There are three major steps from the initial state to a goal position:
+%There are three major steps from the initial state to a goal position:
 %(1) Accelerate at maximum acceleration in the direction of the goal
 %(2) Achieve and hold maximum velocity
 %(3) Decelerate to zero velocity to reach goal
 
-\begin{enumerate}
-\item Accelerate at maximum acceleration in the direction of the goal
-\item Achieve and hold maximum velocity
-\item Decelerate to zero velocity to reach goal
-\end{enumerate}
+\begin{table}[h]
+\centering
+\caption{Trapezoidal Motion Profile Regions}
+\begin{tabular}{|l||l|}
+\hline
+Region 1	&	Accelerate at maximum acceleration in direction of goal \\ \hline
+Region 2	& Achieve and hold maximum velocity \\ \hline
+Region 3 	& Decelerate to zero velocity to reach goal \\ \hline
+\end{tabular}
+
+\label{table:trap}
+\end{table}
+
+
+%\begin{enumerate}
+%\item Accelerate at maximum acceleration in the direction of the goal
+%\item Achieve and hold maximum velocity
+%\item Decelerate to zero velocity to reach goal
+%\end{enumerate}
 
 The area under the velocity trapezoid is the total displacement achieved by the
 profile. By shaping this profile based on initial and goal conditions, any
@@ -61,15 +76,15 @@ The controller minimize the error between $v_c$ and the output velocity $v$,
 at each timestep.
 
 Since the joint is moving with velocity $v_0$ during a current time-step, some
-initial distance $x_{err}$ \eqref{eq:xerr} is traveled before the joint can be
+initial distance $d_{i}$ \eqref{eq:xerr} is traveled before the joint can be
 affected. Defining $\hat{u}$ as the sign of the distance to the goal, $v_c$ is
-related to $x_g$ and $x_{err}$ quadratically in \eqref{eq:vc2}. This equation
+related to $\theta_g$ and $\theta_{err}$ quadratically in \eqref{eq:vc2}. This equation
 assumes simple trapezoidal integration. Solving for $v_c$ using the quadratic
 formula generally produces complex roots due to the possibility of negative
-$v_0$ or $x_g$.  In \eqref{eq:vcrit}, $v_0*\hat{u}$ is the current velocity
+$v_0$ or $\theta_g$.  In \eqref{eq:vcrit}, $v_0\cdot\hat{u}$ is the current velocity
 relative to the goal direction, producing a positive term if the signs of both
 terms match. This result will always produce a real value for all $v_0$ and
-$x_g$.
+$\theta_g$.
 %TODO: Prove this? it should be possible to plot the root as a surface over v_0
 %and x_g
 
@@ -80,12 +95,12 @@ d_s=\frac{v_0^2 sign(v_0)}{2 a_{max}}
 
 \begin{equation}
 \label{eq:xerr}
-x_{err}=v_0 \tau + \frac{v_c-v_0}{2}\tau
+d_{i}=v_0 \tau + \frac{v_c-v_0}{2}\tau
 \end{equation}
 
 \begin{equation}
 \label{eq:uhat}
-\hat{u}=sign(x_g)
+\hat{u}=sign(\theta_g)
 \end{equation}
 
 %\begin{equation}
@@ -95,10 +110,10 @@ x_{err}=v_0 \tau + \frac{v_c-v_0}{2}\tau
 
 \begin{equation}
 \label{eq:vc2}
-v_c^2 = 2 a_{max} \left(x_g -x_{err} \right)
+v_c^2 = 2 a_{max} \left(\theta_g -\theta_{err} \right)
 \end{equation}
 
 \begin{equation}
 \label{eq:vcrit}
-v_c=\hat{u} a_{max} \left(\sqrt{\frac{a_{max} \tau^2 - \hat{u} 4 v_0 \tau+8 |x_g|}{4 a_{max}}} - \frac{ \tau }{2}\right)
+v_c=\hat{u} a_{max} \left(\sqrt{\frac{a_{max} \tau^2 - 4 \hat{u} v_0 \tau+8 |\theta_g|}{4 a_{max}}} - \frac{ \tau }{2}\right)
 \end{equation}
