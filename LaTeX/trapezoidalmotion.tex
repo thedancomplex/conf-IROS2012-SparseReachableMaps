@@ -31,17 +31,17 @@ There are three major steps from the initial state to a goal position:
 The area under the velocity trapezoid is the total displacement achieved by the
 profile. By shaping this profile based on initial and goal conditions, any
 goal position can be precisely reached, even if velocity clipping occurs. The
-shape of the profile can be challenging to identify, however, since it is not
-always a trapezoid. For small displacements and large velocity / acceleration
+shape of the profile can be challenging to identify, since it is not
+always a trapezoid. For small displacements and large velocity and acceleration
 limits, the profile will only reach a fraction of maximum velocity, and will be
 triangular. The varying shape of the profile means that calculating and storing
 the entire profile for each update could be computationally expensive. 
 %THis is a weak statement, since I can't back that up.  Really, it's just unncecessary since my way is better.
 
 The area under the trapezoid can be divided into an accelerating
-\eqref{eq:trapslope} and constant velocity portion, where the area is simply a
-triangle. the time to accelerate is solved from the final velocity and the
-acceleration limit.
+\eqref{eq:trapslope} and constant velocity portions, where the area is simply a
+triangle. The time to accelerate is solved from the final velocity and the
+acceleration limit
 
 \begin{equation}
 \label{eq:trapslope}
@@ -57,15 +57,15 @@ needs to decelerate at the maximum rate to come to rest at the goal.
 Conversely, for the current goal distance, there is a critical velocity $v_c$
 such that, if the joint began moving at this velocity in the following
 timestep, it could decelerate at the maximum rate to reach the position goal.
-The controller's action is simply to minimize the error between $v_c$ and $v$,
-the output velocity of the controller at each timestep.
+The controller minimize the error between $v_c$ and the output velocity $v$,
+at each timestep.
 
 Since the joint is moving with velocity $v_0$ during a current time-step, some
-initial distance $x_{err}$ \eqref{eq:xerr} is travelled before the joint can be
+initial distance $x_{err}$ \eqref{eq:xerr} is traveled before the joint can be
 affected. Defining $\hat{u}$ as the sign of the distance to the goal, $v_c$ is
 related to $x_g$ and $x_{err}$ quadratically in \eqref{eq:vc2}. This equation
 assumes simple trapezoidal integration. Solving for $v_c$ using the quadratic
-formula produces in general complex roots due to the possibility of negative
+formula generally produces complex roots due to the possibility of negative
 $v_0$ or $x_g$.  In \eqref{eq:vcrit}, $v_0*\hat{u}$ is the current velocity
 relative to the goal direction, producing a positive term if the signs of both
 terms match. This result will always produce a real value for all $v_0$ and

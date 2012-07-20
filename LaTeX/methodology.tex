@@ -1,10 +1,10 @@
 \section{METHODOLOGY}\label{sec:methodology}
-To create a valid throwing trajectory for a high-DOF, high-gain, position controlled robot, a desired line in $R^3$ in the direction of the desired velocity must be created.  Each point in the line are temporally separated by the robot's command period $T_r$.  All points in this line must be reachable.  Each point in the line must have a poses that does not create a self collision.  A valid throwing trajectory is created when the latter criteria are met.
+To create a valid throwing trajectory for a high-DOF, high-gain, position controlled robot, a desired line in $R^3$ in the direction of the desired velocity must be created.  Each point in the line is temporally separated by the robot's command period $T_r$.  All points in this line must be reachable.  Each point in the line must have poses that do not create a self-collision.  A valid throwing trajectory is created when the latter criteria are met.
 
-\subsection{Self Collision Detection}\label{sec:selfCollision}
-Self collision is an important when dealing with a high degree of freedom robot.  Unwanted self collisions can cause permanent damage to the physical and electrical hardware as well as causing the robot not to complete the given task.
+\subsection{Self-Collision Detection}\label{sec:selfCollision}
+Self-collision is an important when dealing with a high DOF robot.  Unwanted self-collisions can cause permanent damage to the physical and electrical hardware as well as causing the robot not to complete the given task.
 
-To aid in the detection of self collisions a detailed model of the Hubo KHR-4 was made in the widely used open-source robot simulation environment OpenRAVE\cite{diankovThesis}.  The model was created by exporting the three dimensional schematics that the physical robot was created with, to a format that OpenRAVE can use.  This was done in order to ensure an accurate and detailed model.  For these experiments we needed the external boundaries only; the internal geometry was replaced with a simplistic representation.  The external shell is the only part now visible, see Fig~\ref{fig:vHuboSparse} (Center).  The Proximity Query Package (PQP) was used to detect collisions between any two pieces of the robot's external shell.  Due to the high polygon count of the external shell the computation time of detecting a collision was on the magnitude of seconds.  It is advantageous to reduce this time if the system is to run live on the robot.  Computation time is decreased significantly when boundary/collision geometries are simplified due to the lower polygon count.  The collision geometries were further simplified to decrease computation time by making them primitives such as spheres, cylinder and boxes, see Fig~\ref{fig:vHuboSparse} (Right). 
+To aid in the detection of self-collisions a detailed model of the Hubo KHR-4 was made in the widely used open-source robot simulation environment OpenRAVE\cite{diankovThesis}.  The model was created by exporting the three dimensional schematics that the physical robot was created with, to a format that OpenRAVE can use.  This was done in order to ensure an accurate and detailed model.  For these experiments we needed the external boundaries only; the internal geometry was replaced with a simplistic representation.  The external shell is the only part now visible, see Fig~\ref{fig:vHuboSparse} (Center).  The Proximity Query Package (PQP) was used to detect collisions between any two pieces of the robot's external shell.  Due to the high polygon count of the external shell the computation time of detecting a collision was on the magnitude of seconds.  It is advantageous to reduce this time if the system is to run live on the robot.  Computation time is decreased significantly when boundary/collision geometries are simplified due to the lower polygon count.  The collision geometries were further simplified to decrease computation time by making them primitives such as spheres, cylinder and boxes, see Fig~\ref{fig:vHuboSparse} (Right). 
 
 %\begin{figure}[thpb]
 %  \centering
@@ -14,13 +14,13 @@ To aid in the detection of self collisions a detailed model of the Hubo KHR-4 wa
 %  \label{fig:vHubo}
 %\end{figure}
 
-Joint limitations are added to the model to mimic the physical robot.  The model can be commanded the same configurations as the physical robot.  A pose is commanded to the model, PQP searches for any collisions.  With the simplified collision geometry self collisions are detected on the order of milliseconds.  If there are no collisions then the pose can be applied to the physical robot.  A 5\% increase in volume between the simplified collision geometry and the high polygon geometry was added to ensure all of the physical robot's movements will not collide due to minor calibration errors.
+Joint limitations are added to the model to mimic the physical robot.  The model can be commanded the same configurations as the physical robot.  A pose is commanded to the model, PQP searches for any collisions.  With the simplified collision geometry self-collisions are detected on the order of milliseconds.  If there are no collisions then the pose can be applied to the physical robot.  A 5\% increase in volume between the simplified collision geometry and the high polygon geometry was added to ensure all of the physical robot's movements will not collide due to minor calibration errors.
 
 
 \subsection{Reachable Area}\label{sec:rarea}
-The desired end effector velocity must be achieved with all joint limits and self-collision constraints satisfied at all times. Typical methods of determining reachability is to move each joint through its full range of motion for each degree of freedom\cite{100034,springerlink:101007}. Due to the high degree of freedom of the Hubo KHR-4 this method is not desirable.  A sampling method described in this work is similar to Geraerts et al.\cite{1570152}.  It was used to accommodate the high degree of freedom system.
+The desired end-effector velocity must be achieved with all joint limits and self-collision constraints satisfied at all times. Typical methods of determining reachability is to move each joint through its full range of motion for each DOF\cite{100034,springerlink:101007}. Due to the high DOF of the Hubo KHR-4 this method is not desirable.  A sampling method described in this work is similar to Geraerts et al.\cite{1570152}.  It was used to accommodate the high DOF system.
 
-The active and the static joints must be defined to calculate the reachable area of a manipulator at a discrete time $N$.  The static joints are assumed to hold a fixed position at time step $N$.  Active joints are free to move to any position as long as it satisfies the joint angle limitations and does not create a self collision.  A uniform random number generator is used to assign each active joint with an angle in joint space.  Each random angle assigned is within the valid range of motion of the respective joint.  The self collision model described in Section~\ref{sec:selfCollision} is used to determine the self collision status with the randomly assigned joint angles.  If there is no self collision the end-effector position and transformation matrix $T$ are calculated using forward kinematics.
+Both active and static joints must be defined to calculate the reachable area of a manipulator at a discrete time $N$.  The static joints are assumed to hold a fixed position at time step $N$.  Active joints are free to move to any position as long as it satisfies the joint angle limitations and does not create a self-collision.  A uniform random number generator is used to assign each active joint with an angle in joint space.  Each random angle assigned is within the valid range of motion of the respective joint.  The self-collision model described in Section~\ref{sec:selfCollision} is used to determine the self-collision status with the randomly assigned joint angles.  If there is no self-collision the end-effector position and transformation matrix $T$ are calculated using forward kinematics.
 
 \begin{equation}\label{eq:fk1}
 \mathbf{
@@ -29,21 +29,23 @@ The active and the static joints must be defined to calculate the reachable area
 \end{equation}
 
 \begin{equation}\label{eq:fk2}
-T = \chi_1 \cdot \chi_2 \cdot ... \cdot \chi_n
+T = \left[\chi_1 \cdot \chi_2 \cdot ... \cdot \chi_n \right]
 \end{equation}
 %\chi = \begin{bmatrix} R & \left[ \begin{array}{c} x \\ y \\ z \right]\end{array} \\ \left[ \begin{array}{cc} 0 & 0 & 0 & 1 \end{array} \right]  \end{bmatrix} 
 %\chi = \begin{bmatrix} xz & xw \\ yz & yw \end{bmatrix} = \left[ \begin{array}{c} x \\ y \end{array} \right] \times \left[ \begin{array}{cc} z & w \end{array} \right] 
 %\chi = \begin{bmatrix} R & T \\ 0 & 1 \end{bmatrix}
-where $\chi_i$ is the transformation between joint $i-1$ and $i$, $R_i$ is the rotation of joint $i$ in respect to joint $i-1$ and $\Gamma_i$ is the translation of joint $i$ in respect to joint $i-1$, and $n$ is the number of joints in the kinematic chain.
+where $\chi_i$ is the transformation between joint $i-1$ and $i$, $R_i$ is the rotation of joint $i$ with respect to joint $i-1$ and $\Gamma_i$ is the translation of joint $i$ with respect to joint $i-1$, and $n$ is the number of joints in the kinematic chain.
 
-The end effector position and the joint angles used are recorded.  This process is repeated multiple times to form a sparse representation of reachable end-effector positions in $R^3$ and the corresponding joint angles in joint space.  The resulting representation is called the Sparse Reachable Map (SRM).  Fig.~\ref{fig:sparseRegion} shows that the valid end-effector locations of the right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Fig.~\ref{fig:vHuboSparse} shows the SRM of the entire right arm.  The SRM is used to calculate valid movement trajectories.
+The end-effector position and the joint angles used are recorded.  This process is repeated multiple times to form a sparse representation of reachable end-effector positions in $R^3$ and the corresponding joint angles in joint space.  The resulting representation is called the Sparse Reachable Map (SRM).  Fig.~\ref{fig:sparseRegion} shows a cross section of the SRM about the right shoulder between -0.40 $m$ to 0.40 $m$ on X, -0.40 $m$ to 0.40 $m$ on Z, and -0.21 to -0.22 $m$ on Y.  The blue points show valid end-effector locations with known kinematic solution in joint space.  Fig.~\ref{fig:vHuboSparse} shows the SRM of the entire right arm.  The SRM is used to calculate valid movement trajectories.
 
 
 \begin{figure}[thpb]
   \centering
 %\includegraphics[width=1.0\columnwidth]{./MATLAB/reachable2DofR4p8.pdf}
 \includegraphics[width=1.0\columnwidth]{./MATLAB/throwTrajAct.pdf}
-  \caption{Sparse region of reachable locations for the robot's right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Region created by randomly sampling from joint space.  (Blue) Points with valid kinematic solutions that do not cause a self collision.  (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.}
+\caption{Cross section of the SRM about the right shoulder between -0.40 $m$ to 0.40 $m$ on X, -0.40 $m$ to 0.40 $m$ on Z, and -0.21 to -0.22 $m$ on Y.  (Blue) show valid end-effector locations with known kinematic solution in joint space. (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.
+}
+  %\caption{Sparse region of reachable locations for the robot's right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Region created by randomly sampling from joint space.  (Blue) Points with valid kinematic solutions that do not cause a self-collision.  (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.}
   \label{fig:sparseRegion}
 \end{figure}
 
@@ -58,14 +60,16 @@ The end effector position and the joint angles used are recorded.  This process 
 
 
 \subsection{Trajectory Generation}\label{sec:trajGen}
-An end-effector velocity, $V_e$, is chosen based on target location, the well known equations of projectile motion, and the required velocity duration $t_e$.  $V_e$ must be held for a time span of $t_e$, the release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $V_e$ immediately preceding time span $t_e$ must be less than or equal to the magnitude of $V_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
+An end-effector velocity, $\vec{V}_e$, is chosen based on target location, the well known equations of projectile motion, and the required velocity duration $t_e$.  $\vec{V}_e$ must be held for a time span of $t_e$. The release point must be within the time span $t_e$.  The magnitude of the velocity in the direction of $V_e$ immediately preceding time span $t_e$ must be less than or equal to the magnitude of $\vec{V}_e$ during $t_e$.  $t_e$ must be an integer multiple of the robot's actuator command period $T_r$.
 
-A line, $L_d$, in $R^3$ is created with the origin $(x_0, y_0, z_0)$ in the direction of $V_e$.  Each subsequent point in the line $(X_1, Y_1, Z_1)$, $(X_2, Y_2, Z_2)$ $\cdots$ $(X_n, Y_n, Z_n)$ are separated by a time span $T_r$.
+A line $l_d$ in $R^3$ that passes through $(X_0, Y_0, Z_0)$ in the direction of $\vec{V}_e$ is created.  $\vec{L}_d$ is the discrete representation of $l_d$.  Each point in $\vec{L}_d$, $(X_0, Y_0, Z_0)$, $(X_1, Y_1, Z_1)$ $\cdots$ $(X_n, Y_n, Z_n)$, are separated by a time span $T_r$.
+
+%A line, $L_d$, in $R^3$ is created with the origin $(x_0, y_0, z_0)$ in the direction of \vec{$V_e$}.  Each subsequent point in the line $(X_1, Y_1, Z_1)$, $(X_2, Y_2, Z_2)$ $\cdots$ $(X_n, Y_n, Z_n)$ are separated by a time span $T_r$.
 
 The desired velocity is defined as
 
 \begin{equation}
-V_d = [V_xi, V_yj, V_zk]
+\vec{V}_d = [V_x\hat{i}, V_y\hat{j}, V_z\hat{k}]
 \end{equation}
 
 %\begin{equation}
@@ -80,20 +84,20 @@ V_d = [V_xi, V_yj, V_zk]
 %\Delta L_d(N)_n^{n+1} = \frac{\Delta Xi + \Delta Yj + \Delta Zk}{T_r}
 %\end{equation}
 
-The line $L_d$ is defined as
+The line $\vec{L}_d(n)$ is defined as
 
 \begin{equation}
-L_d(n) = [X_ni, Y_nj , Z_nk]
+\vec{L}_d(n) = [X_n\hat{i}, Y_n\hat{j} , Z_n\hat{k}]
 \end{equation}
 
-where $n$ is the current zero based time step index value for the time span $t_e$.  The change in $L_d$ between time step $0$ and $n$ must be equal to our desired velocity $V_d$.
+where $n$ is the current zero based time step index value for the time span $t_e$.  The change in $\vec{L}_d$ between time step $0$ and $n$ must be equal to our desired velocity $\vec{V}_d$.
 
 %\begin{equation}
 %\Delta L_d(N)_n^{n+1} = \Delta Xi + \Delta Yj + \Delta Zk
 %\end{equation}
 
 \begin{equation}
-\frac{\Delta L_d|_{0}^{n}}{n \cdot T_r} = V_d
+\frac{\Delta \vec{L}_d|_{0}^{n}}{n \cdot T_r} = \vec{V}_d
 \end{equation}
 
 %\begin{equation}
@@ -105,9 +109,9 @@ where $n$ is the current zero based time step index value for the time span $t_e
 %\end{equation}
 
 %Break up into its $i$, $j$, and $k$ components.
-Thus
+thus
 \begin{equation}
-V_d = \frac{L_d(n) - L_d(0)}{n \cdot T_r}
+\vec{V}_d = \frac{\vec{L}_d(n) - \vec{L}_d(0)}{n \cdot T_r}
 \end{equation}
 
 %\begin{eqnarray} 
@@ -115,10 +119,10 @@ V_d = \frac{L_d(n) - L_d(0)}{n \cdot T_r}
 %V_dj & = &  \frac{\Delta Yi}{T_r}  =  \frac{Y_{n+1} - Y_n}{T_r}\\
 %V_dk & = &  \frac{\Delta Zi}{T_r}  =  \frac{Z_{n+1} - Z_n}{T_r}
 %\end{eqnarray}
-The line $L_d$ at time step $n$ can now be defined in terms of $V_d$, $T_r$, the origin $L_d(0)$, and the current zero based time step index value $n$.
+The line $\vec{L}_d$ at time step $n$ can now be defined in terms of $\vec{V}_d$, $T_r$, the origin $\vec{L}_d(0)$, and the current zero based time step index value $n$.
 
 \begin{equation}
-L_d(n) = n \cdot T_r \cdot V_d + L_d(0)
+\vec{L}_d(n) = n \cdot T_r \cdot \vec{V}_d + \vec{L}_d(0)
 \end{equation}
 
 
@@ -140,7 +144,7 @@ L_d(n) = n \cdot T_r \cdot V_d + L_d(0)
 where 
 
 \begin{equation}
-L_d(0) = (X_0, Y_0, Z_0)
+\vec{L}_d(0) = \left[X_0, Y_0, Z_0\right]
 \end{equation}
 
 %\begin{eqnarray} 
@@ -155,21 +159,21 @@ L_d(0) = (X_0, Y_0, Z_0)
 %				 + (n \cdot V_dk \cdot T_r + Z_0)k
 %\end{equation}
 
-The line $L_d$ is the trajectory the robot's end effector must follow during the time span $t_e$.  A starting point $L_d(0)$ must be found so that $L_d$ is within the reachable area.  $L_d(0)$ is set to a random starting points chosen within the SRM.  
+The line $\vec{L}_d$ is the trajectory the robot's end-effector must follow during the time span $t_e$.  The starting point $\vec{L}_d(0)$ must be found so that $\vec{L}_d$ is within the reachable area.  $\vec{L}_d(0)$ is set to a random starting points chosen within the SRM.  
 
 \begin{equation}
-L_d(0) \in SRM
+\vec{L}_d(0) \in SRM
 \end{equation}
 
-All subsequent points in $L_d$ must fall within some Euclidean distance $d$ from any point in SRM.  If one of the points in $L_d$ fails this criteria a new random point is chosen for $L_d(0)$ and the process is repeated. 
+All subsequent points in $\vec{L}_d$ must fall within some Euclidean distance $d$ from any point in SRM.  If one of the points in $\vec{L}_d$ fails this criteria a new random point is chosen for $\vec{L}_d(0)$ and the process is repeated. 
 
-Once an $L_d$ is found that fits the above criteria the inverse kinematic solution must be found for each point and checked for reachability.  Smaller values of $d$ will increase the probability $L_d$ is within the reachable area defined in the SRM however more iterations will be required to find a valid $L_d$.  Larger values of $d$ will decrease the number of iterations needed to find a valid $L_d$ however the probability of $L_d$ being in the reachable area is decreased.  In addition larger values of $d$ decreases the system's ability to properly map near sharp edges in the SRM.  Increasing the number of samples in the SRM will allow for larger values for $d$.
+Once an $\vec{L}_d$ is found that fits the above criteria the inverse kinematic solution must be found for each point and checked for reachability.  Smaller values of $d$ will increase the probability $\vec{L}_d$ is within the reachable area defined in the SRM however more iterations will be required to find a valid $\vec{L}_d$.  Larger values of $d$ will decrease the number of iterations needed to find a valid $\vec{L}_d$ however the probability of $\vec{L}_d$ being in the reachable area is decreased.  In addition larger values of $d$ decreases the system's ability to properly map near sharp edges in the SRM.  Increasing the number of samples in the SRM will allow for larger values for $d$.
 
 \subsection{Inverse Kinematics}\label{sec:ik}
-The trajectory $L_d$ has one point with a known kinematic solution in $R^3$ and in joint space, $L_d(0)$.  The joint space kinematic solutions for points $L_d(1) \rightarrow L_d(n)$ are unknown.  Mapping the robot's configuration $q \in Q$ to the desired end-effector goal $x_g \in X$, where $Q$ is the robot's configuration space and $X$ is in $R^3$, is done using Jacobian Transpose Controller used by Weghe et al.\cite{4813913}.  Weghe shows the Jacobian as a linear map from the tangent space of $Q$ to $X$ and is express as
+The trajectory $\vec{L}_d$ has one point with a known kinematic solution in $R^3$ and in joint space, $\vec{L}_d(0)$.  The joint space kinematic solutions for points $\vec{L}_d(1) \rightarrow \vec{L}_d(n)$ are unknown.  Mapping the robot's configuration $\vec{q} \in Q$ to the desired end-effector goal $\vec{x}_g \in X$, where $Q$ is the robot's configuration space and $X$ is in $R^3$, is done using Jacobian Transpose Controller used by Weghe et al.\cite{4813913}.  Weghe shows the Jacobian as a linear map from the tangent space of $Q$ to $X$ and is expressed as
 
 \begin{equation}
-\dot{x} = J\dot{q}
+\dot{\vec{x}} = J\dot{\vec{q}}
 \end{equation}
 
   The Jacobian Transpose method is used because of the high DOF of the Hubo KHR-4.  Under the assumption of an obstacle-free environment the Jacobian Transpose Controller is guaranteed to reach the goal.  A proof is shown by Wolovich et al.\cite{4048118}.
@@ -177,44 +181,44 @@ The trajectory $L_d$ has one point with a known kinematic solution in $R^3$ and 
 To drive the manipulator from its current position $x$ to the goal positions $x_g$ the error $e$ is computed and the control law is formed.
 
 \begin{equation}
-e = x_g - x
+\vec{e} = \vec{x}_g - \vec{x}
 \end{equation}
 
 \begin{equation}
-\dot{q} = kJ^Te
+\dot{\vec{q}} = kJ^T\vec{e}
 \end{equation}
 
-where k is a positive gain and self collisions are ignored.  The instantaneous motion of the end-effector is given by
+where k is a positive gain and self-collisions are ignored.  The instantaneous motion of the end-effector is given by
 
 \begin{equation}
-\dot{x} = J\dot{q} = J(kJ^Te)
+\dot{\vec{x}} = J\dot{\vec{q}} = J(kJ^T\vec{e})
 \end{equation}
 
-The final pose $q$ for our goal position $x_g$ can now be found.
+The final pose $\vec{q}$ for our goal position $\vec{x}_g$ can now be found.
 
-The Jacobian Transpose method works best when there is a small difference between the current position $x$ and the goal position $x_g$.  $L_d(0)$ is known both in $X$ and in $Q$ and is the starting point.
+The Jacobian Transpose method works best when there is a small difference between the current position $\vec{x}$ and the goal position $\vec{x_g}$.  $\vec{L}_d(0)$ is known both in $X$ and in $Q$ and is the starting point.
 
 \begin{equation}
-x = L_d(0)
+\vec{x} = \vec{L}_d(0)
 \end{equation}
 
 \begin{equation}
-q_0 = SRM  \left( L_d(0) \right)
+\vec{q}_0 = SRM  \left( \vec{L}_d(0) \right)
 \end{equation}
 
-The goal position $x_g$ is set to the next point in $L_d$
+The goal position $\vec{x}_g$ is set to the next point in $\vec{L}_d$
 
 \begin{equation}
-x_g = L_d(1)
+\vec{x}_g = \vec{L}_d(1)
 \end{equation}
 
-The pose $q_1$ can now be calculated
+The pose $\vec{q}_1$ can now be calculated
 
 \begin{equation}
-q_1 = q_0 + \dot{q}_0 = q_0 + kJ^Te|_{x}^{x_g}
+\vec{q}_1 = \vec{q}_0 + \dot{\vec{q}}_0 = \vec{q}_0 + kJ^T\vec{e}|_{\vec{x}}^{\vec{x}_g}
 \end{equation}
 
-where $x_g = L_d(0)$ and $x = L_d(1)$.  $L_d(1)$ is now known both in $X$ and in $Q$.  Now $x = L_d(1)$ and the process is repeated until all points in $L_d$ are known both in $X$ and $Q$.
+where $\vec{x}_g = \vec{L}_d(0)$ and $\vec{x} = \vec{L}_d(1)$.  $\vec{L}_d(1)$ is now known both in $X$ and in $Q$.  Now $\vec{x} = \vec{L}_d(1)$ and the process is repeated until all points in $L_d$ are known both in $X$ and $Q$.
 
 
 
