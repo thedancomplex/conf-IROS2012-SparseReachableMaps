@@ -4,6 +4,14 @@ To create a valid throwing trajectory for a high-DOF, high-gain, position contro
 \subsection{Self-Collision Detection}\label{sec:selfCollision}
 Self-collision is an important when dealing with a high DOF robot.  Unwanted self-collisions can cause permanent damage to the physical and electrical hardware as well as causing the robot not to complete the given task.
 
+\begin{figure}[thpb]
+  \centering
+%\includegraphics[width=0.5\columnwidth]{./pictures/hubo1s.png}\includegraphics[width=0.5\columnwidth]{./pictures/hubo2s.png}
+\includegraphics[width=0.36\columnwidth]{./pictures/final/SRM.png}\includegraphics[width=0.36\columnwidth]{./pictures/final/ThrowTrajDiag.png}\includegraphics[width=0.28\columnwidth]{./pictures/final/hCol.png}
+  \caption{OpenRAVE model of Hubo KHR-4. Left: Model with SRM of right arm.  Center: SRM (blue) with setup and velocity phase trajectories (green) Right: Collision Geometry  }
+  \label{fig:vHuboSparse}
+\end{figure}
+
 To aid in the detection of self-collisions a detailed model of the Hubo KHR-4 was made in the widely used open-source robot simulation environment OpenRAVE\cite{diankovThesis}.  The model was created by exporting the three dimensional schematics that the physical robot was created with, to a format that OpenRAVE can use.  This was done in order to ensure an accurate and detailed model.  For these experiments we needed the external boundaries only; the internal geometry was replaced with a simplistic representation.  The external shell is the only part now visible, see Fig~\ref{fig:vHuboSparse} (Center).  The Proximity Query Package (PQP) was used to detect collisions between any two pieces of the robot's external shell.  Due to the high polygon count of the external shell the computation time of detecting a collision was on the magnitude of seconds.  It is advantageous to reduce this time if the system is to run live on the robot.  Computation time is decreased significantly when boundary/collision geometries are simplified due to the lower polygon count.  The collision geometries were further simplified to decrease computation time by making them primitives such as spheres, cylinder and boxes, see Fig~\ref{fig:vHuboSparse} (Right). 
 
 %\begin{figure}[thpb]
@@ -19,7 +27,6 @@ Joint limitations are added to the model to mimic the physical robot.  The model
 
 \subsection{Reachable Area}\label{sec:rarea}
 The desired end-effector velocity must be achieved with all joint limits and self-collision constraints satisfied at all times. Typical methods of determining reachability is to move each joint through its full range of motion for each DOF\cite{100034,springerlink:101007}. Due to the high DOF of the Hubo KHR-4 this method is not desirable.  A sampling method described in this work is similar to Geraerts et al.\cite{1570152}.  It was used to accommodate the high DOF system.
-
 Both active and static joints must be defined to calculate the reachable area of a manipulator at a discrete time $N$.  The static joints are assumed to hold a fixed position at time step $N$.  Active joints are free to move to any position as long as it satisfies the joint angle limitations and does not create a self-collision.  A uniform random number generator is used to assign each active joint with an angle in joint space.  Each random angle assigned is within the valid range of motion of the respective joint.  The self-collision model described in Section~\ref{sec:selfCollision} is used to determine the self-collision status with the randomly assigned joint angles.  If there is no self-collision the end-effector position and transformation matrix $T$ are calculated using forward kinematics.
 
 \begin{equation}\label{eq:fk1}
@@ -39,22 +46,17 @@ where $\chi_i$ is the transformation between joint $i-1$ and $i$, $R_i$ is the r
 The end-effector position and the joint angles used are recorded.  This process is repeated multiple times to form a sparse representation of reachable end-effector positions in $R^3$ and the corresponding joint angles in joint space.  The resulting representation is called the Sparse Reachable Map (SRM).  Fig.~\ref{fig:sparseRegion} shows a cross section of the SRM about the right shoulder between -0.40 $m$ to 0.40 $m$ on X, \mbox{-0.40} $m$ to 0.40 $m$ on Z, and -0.21 to -0.22 $m$ on Y.  The blue points show valid end-effector locations with known kinematic solution in joint space.  Fig.~\ref{fig:vHuboSparse} shows the SRM of the entire right arm.  The SRM is used to calculate valid movement trajectories.
 
 
+  %\caption{Sparse region of reachable locations for the robot's right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Region created by randomly sampling from joint space.  (Blue) Points with valid kinematic solutions that do not cause a self-collision.  (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.}
+
+
+
+
 \begin{figure}[thpb]
   \centering
 %\includegraphics[width=1.0\columnwidth]{./MATLAB/reachable2DofR4p8.pdf}
 \includegraphics[width=1.0\columnwidth]{./MATLAB/throwTrajAct.pdf}
 \caption{Cross section of the SRM about the right shoulder between -0.40 $m$ to 0.40 $m$ on X, -0.40 $m$ to 0.40 $m$ on Z, and -0.21 to -0.22 $m$ on Y.  (Blue) show valid end-effector locations with known kinematic solution in joint space. (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.
-}
-  %\caption{Sparse region of reachable locations for the robot's right arm between -0.40m and 0.40m on X, -0.40m and 0.40m on Z, and -0.21 to -0.22m on Y.  Region created by randomly sampling from joint space.  (Blue) Points with valid kinematic solutions that do not cause a self-collision.  (Red) Commanded right arm end-effector position in $R^3$.  (Green) The logged joint space values converted to $R^3$ using forward kinematics.}
-  \label{fig:sparseRegion}
-\end{figure}
-
-\begin{figure}[thpb]
-  \centering
-%\includegraphics[width=0.5\columnwidth]{./pictures/hubo1s.png}\includegraphics[width=0.5\columnwidth]{./pictures/hubo2s.png}
-\includegraphics[width=0.36\columnwidth]{./pictures/final/SRM.png}\includegraphics[width=0.36\columnwidth]{./pictures/final/ThrowTrajDiag.png}\includegraphics[width=0.28\columnwidth]{./pictures/final/hCol.png}
-  \caption{OpenRAVE model of Hubo KHR-4. Left: Model with SRM of right arm.  Center: SRM (blue) with setup and velocity phase trajectories (green) Right: Collision Geometry  }
-  \label{fig:vHuboSparse}
+}  \label{fig:sparseRegion}
 \end{figure}
 
 
